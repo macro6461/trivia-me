@@ -29,7 +29,6 @@ class Games extends Component{
     };
 
     newGame = (game) =>{
-        debugger
         this.props.newGame(game);
         this.closeModal('showNew')
     };

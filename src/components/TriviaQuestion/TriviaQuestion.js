@@ -1,12 +1,19 @@
 import React from 'react';
 import { FaCheckSquare, FaRegWindowClose } from "react-icons/fa";
-import './TriviaQuestion.scss';
+import './TriviaQuestion.css';
 
 
 const TriviaQuestion = function TriviaQuestion(props) {
 
-    const mouseEnter = (e) =>{
+    const animateAndRecordAnswers = (e) =>{
         var label = e.target;
+        var children = label.childNodes;
+
+        for (var i = 0; i < children.length; i++){
+            if (children[i].nodeName === 'SPAN'){
+                children[i].remove()
+            }
+        }
 
         var el = label.getBoundingClientRect();
 
@@ -38,19 +45,13 @@ const TriviaQuestion = function TriviaQuestion(props) {
         child.style = `width: ${buttonWidth}px; height: ${buttonHeight}px; top: ${y}px; left: ${x}px;`
 
         child.classList += ' rippleEffect';
-        label.style.backgroundColor = '#B19CD9';
-        label.style.color = "white"
 
-    }
+        setTimeout(()=>{
+            props.recordAnswers(props.qId, parseInt(label.id.split("-")[1]))
+        }, 300);
 
-    const mouseLeave = (e) =>{
-        var label = e.target;
-        if (document.getElementById(label.id + 'span')){
-            document.getElementById(label.id + 'span').remove()
-        }
-        label.style.backgroundColor = 'white'
-        label.style.color = ""
-    }
+        debugger
+    };
 
     var display = "none";
 
@@ -67,38 +68,32 @@ const TriviaQuestion = function TriviaQuestion(props) {
     const answers = props.question.qAnswers.map((a, i)=>{
         var checked = userJourneyObj && userJourneyObj.answer === a.aId;
         var backgroundColor = 'white';
-        if (props.showFinal && props.question.correct && (userJourneyObj && userJourneyObj.answer === a.aId)){
+        if (props.showFinal && props.question.correct && (userJourneyObj &&userJourneyObj.answer === a.aId)){
             backgroundColor = '#00A86B'
-        } else if (props.showFinal && !props.question.correct && (userJourneyObj && userJourneyObj.answer === a.aId)){
+        } else if (props.showFinal && !props.question.correct && (userJourneyObj &&userJourneyObj.answer === a.aId)){
             backgroundColor = '#cc3333'
         }
-        return <div key={props.qId + '-' + a.aId} className="labelDiv">
-            <label id={props.qId + '-' + a.aId} key={props.qId + '-' + a.aId}
-                   onMouseEnter={!props.showFinal ? mouseEnter : null}
-                   onMouseLeave={!props.showFinal ? mouseLeave : null}
-                   onClick={!props.showFinal ? ()=>{props.recordAnswers(props.qId, a.aId)} : null}
-                   className="labelContainer"
-                   style={{backgroundColor, color: backgroundColor !== 'white' ? 'white' : ''}}
-                   htmlFor={props.qId + '-' + a.aId}>
-                {a.aContent}
-                <input id={props.qId + '-' + a.aId}
-                       name={props.qId + '-' + a.aId}
-                       type="radio" value={a.aId}
-                       onChange={()=>{props.recordAnswers(props.qId, a.aId)}}
-                       style={{display: 'none'}}
-                       checked={checked}
-                />
-
-            </label>
-            {checked && a.aId !== props.question.answer
-                ? <div><i style={{float: 'right'}}>{correctAnswer.aContent}</i></div>
-                : null
-            }
-            {i === len - 1
-                ? <br/>
-                :null
-            }
-        </div>
+           return <div key={props.qId + '-' + a.aId} className="labelDiv">
+               <label id={props.qId + '-' + a.aId} key={props.qId + '-' + a.aId} onClick={!props.showFinal ? animateAndRecordAnswers : null} className="labelContainer" style={{backgroundColor, color: backgroundColor !== 'white' ? 'white' : ''}} htmlFor={props.qId + '-' + a.aId}>
+            {a.aContent}
+            <input id={props.qId + '-' + a.aId}
+                   name={props.qId + '-' + a.aId}
+                   type="radio" value={a.aId}
+                   // onChange={()=>{props.recordAnswers(props.qId, a.aId)}}
+                   style={{display: 'none'}}
+                   checked={checked}
+            />
+{/*<div className="pulseDiv"></div>*/}
+        </label>
+               {checked && a.aId !== props.question.answer
+                   ? <div><i style={{float: 'right'}}>{correctAnswer.aContent}</i></div>
+                   : null
+               }
+               {i === len - 1
+                   ? <br/>
+                   :null
+               }
+           </div>
     });
 
     if (props.currentQuestion === props.qId){

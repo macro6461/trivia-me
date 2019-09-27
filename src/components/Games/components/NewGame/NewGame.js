@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Modal, Input, Button, Collapse, Radio, Tooltip} from 'antd';
+import {Modal, Input, Button, Collapse, Radio, Tooltip, Popover, Icon} from 'antd';
+import Question from '../Question/Question.js';
 import './NewGame.css';
 
 const { Panel } = Collapse;
@@ -13,7 +14,11 @@ class NewGame extends Component{
         correctAnswer: '',
         currentQ: '',
         currentA: '',
-        answersQuestion: null
+        answersQuestion: null,
+        editQ: null,
+        deleteQ: null,
+        editA: null,
+        deleteA: null,
     };
 
     updateCurrent = (x, directive) =>{
@@ -72,10 +77,10 @@ class NewGame extends Component{
     };
 
     updateAnswersQuestion = (x) =>{
-        var answersQuestion = x ? parseInt(x) : null;
-        this.setState({
-            answersQuestion
-        })
+            var answersQuestion = x ? parseInt(x) : null;
+            this.setState({
+                answersQuestion
+            })
     };
 
     onSubmit = () =>{
@@ -89,66 +94,216 @@ class NewGame extends Component{
         this.props.onCancel();
     };
 
+    setEditQ = (question, e) => {
+        e.stopPropagation();
+            this.setState({
+                editQ: question,
+                answersQuestion: null
+            })
+
+    };
+
+    setDeleteQ = (question, e) =>{
+        e.stopPropagation();
+            this.setState({
+                deleteQ: question,
+                answersQuestion: null
+            })
+    };
+
+    deleteQ = (e) => { 
+        e.stopPropagation()
+        var questions = this.state.questions.filter((x)=>{return x.id !== this.state.deleteQ.id})
+        this.setState({
+            questions
+        }, ()=>{
+            this.resetDeleteQ(e)
+        })
+    }
+
+    resetDeleteQ = (e) =>{
+        if (e === false){
+            this.setState({
+                deleteQ: null
+            })
+        }
+    };
+
+    resetEditQ = (e) =>{
+        if (e === false){
+            this.setState({
+                editQ: null
+            })
+        }
+    };
+
+    updateEditQName = (e, question) =>{
+        var obj = {};
+        obj['id'] = question.id;
+        obj['qTitle'] = e.target.value;
+        obj['qAnswers'] = question.qAnswers;
+        obj['answer'] = question.answer
+        this.setState({
+            editQ: obj
+        })
+    };
+
+    updateEditQAnswers = (question, e) =>{
+
+    };
+
+    submitEditQuestion = (e) =>{
+      e.stopPropagation();
+      var questions = this.state.questions
+      var q = questions.find((x)=>{return x.id === this.state.editQ.id});
+      var index = questions.indexOf(q)
+      questions[index] = this.state.editQ
+      this.setState({
+          questions
+      }, ()=>{
+        this.closeEditQ(e)
+      })
+    };
+
+    editAnswer = (answer, e)=>{
+        
+    };
+
+    closeEditQ = (e) =>{
+        e.stopPropagation();
+        this.setState({
+            editQ: null
+        })
+    };
+
+    onRemoveQ = (e) =>{
+        e.stopPropagation();
+        var questions = this.state.questions.filter((x)=>{return x.id !== this.state.editQ.id});
+        this.setState({
+            questions
+        }, ()=>{
+            this.closeEditQ(e)
+        })
+    };
+
+
     render(){
 
         var questions = this.state.questions.map((question, i)=>{
             var correct = question.answer;
-            return <Panel header={i + 1 + '. ' + question.qTitle} key={question.id} >
-                <h4 style={{textAlign: 'center'}}>Answers</h4>
-                    <Radio.Group onChange={(e)=>{this.addFinalAnswer(question.id, e)}}>
-                    {question.qAnswers.map((answer, i)=>{
-                        var backgroundColor = answer.aId === correct ? '#B19CD9' : '';
-                        var color = answer.aId === correct ? 'white' : '';
-                       return <Tooltip title="Mark as correct answer." key={answer.aId}>
-                           <Radio.Button value={answer.aId} style={{backgroundColor, color}}>
-                           {i + 1 + '. ' + answer.aContent}
-                       </Radio.Button>
-                       </Tooltip>
-                    })}
-                    </Radio.Group>
-                <br/>
-                {question.qAnswers.length <= 4
-                    ? <div>Answer {question.qAnswers.length + 1 + '. '} <Input value={this.state.currentA} allowClear onChange={(e) => {
-                    this.updateCurrent(e, 'currentA')
-                }}/>
-                        <Button onClick={this.addAnswer} disabled={this.state.currentA.length <= 0}>Add Answer</Button></div>
-                    : null
-                }
-                </Panel>
+            return <Panel header={i + 1 + '. ' + question.qTitle} key={question.id} extra={
+                        <div>
+                            <Icon type="setting" onClick={(e)=>{this.setEditQ(question, e)}} style={{marginRight: 10}}/>
+                            <Popover
+                                title="Delete Question"
+                                trigger="click"
+                                visible={this.state.deleteQ === question}
+                                content={
+                                    <div style={{margin: 10}}>
+                                        <p>{`Are you sure you want to delete ${this.state.deleteQ ? this.state.deleteQ.qTitle : ''}?`}</p>
+                                        <Button onClick={(e)=>{this.setDeleteQ(null, e)}} style={{marginRight: 10}}>No</Button>
+                                        <Button type="danger" onClick={this.deleteQ}>Delete</Button>
+                                    </div>}
+                                onClick={(e)=>{e.stopPropagation()}}
+                                onVisibleChange={(e)=>{this.resetDeleteQ(e)}}
+                            >
+                                <Icon type="delete" onClick={(e)=>{this.setDeleteQ(question, e)}}/>
+                            </Popover>
+
+                        </div>
+
+                    }><Question key={question.id}
+                             currentA={this.state.currentA}
+                             currentQ={this.state.currentQ}
+                             correct={correct}
+                             updateEditQName={this.updateEditQName}
+                             setEditQ={this.setEditQ}
+                             addFinalAnswer={this.addFinalAnswer}
+                             updateCurrent={this.updateCurrent}
+                             addAnswer={this.addAnswer}
+                             question={question}
+                             index={i}
+            /></Panel>
         });
 
         var anyEmptyQs = this.state.questions.filter((x)=>{return x.qAnswers.length <= 0});
 
-        var disabled = this.state.name.length <= 0 || this.state.questions.length <= 0 || anyEmptyQs.length > 0
+        var needsToPickFinalAnswer = this.state.questions.filter((x)=>{
+            return x.qAnswers.length > 0 && x.answer.length <= 0
+        });
+
+        var disabled = this.state.name.length <= 0 || this.state.questions.length <= 0 || anyEmptyQs.length > 0 || needsToPickFinalAnswer.length > 0;
+
+        var text
+
+        if (this.state.name.length <= 0){
+            text = 'Please enter a name for your game.'
+        } else if (this.state.questions.length <= 0){
+            text = 'Please add one or more questions.'
+        } else if (anyEmptyQs.length > 0){
+            text = "One or more of your questions need to answers."
+        } else if (needsToPickFinalAnswer.length > 0) {
+            text = "One or more of your questions need to have a final answer chosen."
+        } else {
+            text = "Create Game"
+        }
+
+        var footer = <div>
+            <Button onClick={this.props.onCancel} style={{marginRight: 15}}>Cancel</Button>
+            <Tooltip title={text}><Button type="primary" onClick={this.onSubmit} disabled={disabled}>OK</Button></Tooltip>
+        </div>
 
         return (
             <Modal title="New Game"
                    visible={true}
-                   onOk={this.onSubmit}
                    onCancel={this.props.onCancel}
-                   okButtonProps={{disabled}}
+                   footer={footer}
             >
-                Name: <Input value={this.state.name} onChange={(value)=>{this.updateName(value)}} allowClear/>
+                Name: <Input value={this.state.name} onChange={(e)=>{this.updateName(e)}} allowClear style={{width: 85 + '%'}}/>
                 <br/>
                 {this.state.name.length > 0
                     ? <div>
                         <h4 style={{textAlign: 'center', marginTop: 10}}> Questions</h4>
-                        <Collapse onChange={this.updateAnswersQuestion} accordion={true}>
-                        {questions}
-                        </Collapse>
+                        {this.state.questions.length > 0
+                            ? <Collapse onChange={this.updateAnswersQuestion}
+                                        accordion={true}
+                                        activeKey={!this.state.editQ && !this.state.editA && !this.state.deleteQ && !this.state.deleteA ? this.state.answersQuestion : null}>
+                                {questions}
+                            </Collapse>
+                            : null
+                        }
                         {this.state.questions.length <= 4
-                            ? <div style={{marginTop: 10, marginBottom: 10}}><p>Question {this.state.questions.length + 1 + '. '}</p> <Input value={this.state.currentQ}
+                            ? <div style={{marginTop: 10, marginBottom: 10}}><Input value={this.state.currentQ}
                                                                                             allowClear
+                                                                                            placeholder={`Question ${this.state.questions.length + 1} `}
                                                                                             onChange={(e) => {
                                                                                                 this.updateCurrent(e, 'currentQ')
                                                                                             }}/>
-                                <Button onClick={this.addQuestion} disabled={this.state.currentQ.length <= 0} style={{marginTop: 10}}>Add
-                                    Question</Button></div>
+                                <div style={{width: 100 + '%', textAlign: 'right'}}>
+                                    <Button onClick={this.addQuestion} disabled={this.state.currentQ.length <= 0} style={{marginTop: 10}}>Add
+                                    Question</Button>
+                                </div>
+                            </div>
                             : null
                         }
                     </div>
                     :null
                 }
+                <Modal
+                title="Edit Question"
+                style={{marginTop: 100}}
+                visible={!!this.state.editQ}
+                footer={<div style={{margin: 10}}>
+                <Button onClick={(e)=>{this.setEditQ(null, e)}} style={{marginRight: 10}}>Cancel</Button>
+                <Button type="primary" onClick={(e)=>{this.submitEditQuestion(e)}}>Edit</Button>
+            </div>}
+                >
+                <Input value={this.state.editQ ? this.state.editQ.qTitle : ''}
+                                   allowClear
+                                   onChange={(e) => {
+                                       this.updateEditQName(e, this.state.editQ)
+                               }}/>
+                </Modal>
             </Modal>
         )
     }

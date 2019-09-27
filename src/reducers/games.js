@@ -1,18 +1,57 @@
 import {handleActions} from 'redux-actions';
+import { notification} from "antd";
 
 const games = handleActions({
     ['games/fetchGames'](state, action) {
 
     },
     ['games/getGame'](state, action) {
-        var game = state.games.find((x)=>{return x.id === action.payload});
-        return {...state, game}
+        return {...state, loading: true}
+    },
+    ['games/getGame/success'](state, action) {
+        var game = action.payload;
+        return {...state, game, loading: false}
+    },
+    ['games/getGame/fail'](state, action) {
+        notification.error({
+            message: 'Game could not be found.'
+        });
+        return {...state, game: null, loading: false}
+    },
+    ['games/newGame'](state, action) {
+        return {...state, loading: true}
+    },
+    ['games/newGame/success'](state, action) {
+        var games = state.games;
+        games.push(action.payload);
+        notification.success({
+            message: `${action.payload.name} has been created successfully.`
+        });
+        return {...state, games, loading: false}
+    },['games/newGame/fail'](state, action) {
+        notification.success({
+            message: 'Game could not be created.'
+        });
+        return {...state, loading: false}
     },
     ['games/deleteGame'](state, action) {
+        return {...state, loading: true}
+    },
+    ['games/deleteGame/success'](state, action) {
         var games = state.games.filter((x)=>{return x.id !== action.payload});
-        return {...state, games}
+        notification.success({
+            message: 'Game has been deleted.'
+        });
+        return {...state, games, loading: false}
+    },
+    ['games/deleteGame/fail'](state, action) {
+        notification.error({
+            message: 'Game could not been deleted.'
+        });
+        return {...state, loading: false}
     }
 }, {
+    loading: false,
     games: [
         {
         id: 1,

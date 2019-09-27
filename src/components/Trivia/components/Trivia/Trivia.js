@@ -10,22 +10,26 @@ export default class Trivia extends Component {
         game: this.props.game,
         questions: [],
         currentQuestion: 0,
+        index: 0,
         userJourney: [],
         showFinalButton: false,
         showFinal: false
     };
 
     componentDidMount = () => {
-        var userJourney = this.state.userJourney;
-        var questions = this.state.game.questions;
-        var obj = {};
-        obj['qId'] = this.state.game.questions[0].id;
-        obj['answer'] = null
-        userJourney.push(obj);
-          this.setState({
-              questions,
-              userJourney
-          })
+        if (this.state.game){
+            var userJourney = this.state.userJourney;
+            var questions = this.state.game.questions;
+            var obj = {};
+            obj['qId'] = this.state.game.questions[0].id;
+            obj['answer'] = null
+            userJourney.push(obj);
+            this.setState({
+                questions,
+                userJourney,
+                currentQuestion: obj.qId
+            })
+        }
     };
 
     recordAnswers = (qnId, aId) =>{
@@ -38,9 +42,9 @@ export default class Trivia extends Component {
         userJourney[index] = q;
         this.setState({
             userJourney,
-            currentQuestion: this.state.currentQuestion + 1
+            currentQuestion: this.state.currentQuestion + 1,
+            index: this.state.index + 1
         }, ()=>{
-            console.log(this.state.currentQuestion);
             this.checkFinal()
         })
     };
@@ -53,7 +57,7 @@ export default class Trivia extends Component {
                 showFinalButton: true
             })
         } else {
-            var obj = this.createUserJourneyObj(this.state.questions[this.state.currentQuestion]);
+            var obj = this.createUserJourneyObj(this.state.questions[this.state.index]);
             userJourney.push(obj);
             this.setState({
                 userJourney
@@ -66,13 +70,6 @@ export default class Trivia extends Component {
       obj['qId'] = question.id;
       obj['answer'] = null;
         return obj
-    };
-
-    nextQuestion = () =>{
-
-        this.setState({
-
-        })
     };
 
     calcResults = () =>{
@@ -93,17 +90,18 @@ export default class Trivia extends Component {
     startOver = () =>{
         var userJourney = [];
         var questions = this.state.questions.map((x)=>{
-            x.correct = null
+            x.correct = null;
             return x
         })
         var obj = {};
         obj['qId'] = this.state.questions[0].id;
         obj['answer'] = null
-        userJourney.push(obj)
+        userJourney.push(obj);
         this.setState({
             questions,
             userJourney,
-            currentQuestion: 0,
+            currentQuestion: obj.qId,
+            index: 0,
             showFinal: false
         })
     };

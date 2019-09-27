@@ -27,7 +27,7 @@ function App(props) {
                 <Route exact path="/games" component={Games}/>
                 <Route path="/account" component={Account}/>
                 <Route path="/games/:id" render={({match})=>{
-                    props.getGame(parseInt(match.params.id));
+                    props.getGame({id: parseInt(match.params.id), games: props.games});
                     return <Trivia/>
                 }}/>
                 <Route component={NotFound} />
@@ -37,19 +37,25 @@ function App(props) {
   );
 }
 
+const mapStateToProps = state =>{
+    return{
+        games: state.games
+    }
+}
+
 const mapDispatchToProps = dispatch => {
     return {
-        getGame(req) {
+        getGame(obj) {
             const actionCreator = createAction(
                 "games/getGame"
             );
-            const action = actionCreator(req);
+            const action = actionCreator(obj);
             dispatch(action);
         }
     }
 };
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(App);
