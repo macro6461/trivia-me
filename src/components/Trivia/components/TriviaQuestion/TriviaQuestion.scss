@@ -13,20 +13,18 @@
     overflow: hidden;
 }
 
-.labelDiv{
-    animation: ScaleIn 0.5s linear; animation-fill-mode: both;
+@mixin animation-delay {
+    @for $i from 1 through 10 {
+        &:nth-child(#{$i}) {
+            animation-delay: $i * 0.1s;
+        }
+    }
 }
 
-.labelDiv:nth-child(1){animation-delay: 0.1s;}
-.labelDiv:nth-child(2){animation-delay: 0.2s;}
-.labelDiv:nth-child(3){animation-delay: 0.3s;}
-.labelDiv:nth-child(4){animation-delay: 0.4s;}
-.labelDiv:nth-child(5){animation-delay: 0.5s;}
-.labelDiv:nth-child(6){animation-delay: 0.6s;}
-.labelDiv:nth-child(7){animation-delay: 0.7s;}
-.labelDiv:nth-child(8){animation-delay: 0.8s;}
-.labelDiv:nth-child(9){animation-delay: 0.9s;}
-.labelDiv:nth-child(10){animation-delay: 1s;}
+.labelDiv{
+    animation: ScaleIn 0.5s linear; animation-fill-mode: both;
+    @include animation-delay;
+}
 
 .labelContainer:hover{
     transform: translateZ(0)scale(1.0, 1.0);

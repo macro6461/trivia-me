@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaCheckSquare, FaRegWindowClose } from "react-icons/fa";
-import './TriviaQuestion.css';
+import './TriviaQuestion.scss';
 
 
 const TriviaQuestion = function TriviaQuestion(props) {

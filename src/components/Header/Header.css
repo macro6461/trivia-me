@@ -1,0 +1,51 @@
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    height: 40px;
+}
+
+.link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.header h1{
+    margin-left: 20px;
+}
+
+.user-details{
+    position: relative;
+    margin-right: 20px;
+    width: 150px;
+}
+
+.user-icon{
+    font-size: 35px;
+    cursor: pointer;
+}
+
+.user-menu{
+    background-color: white;
+    border: solid 1px whitesmoke;
+    position: absolute;
+    right:0px;
+    width: 150px;
+}
+
+ul{
+    list-style: none;
+    width:90%;
+    padding-left: 0px;
+    margin: 0px;
+    text-align: left;
+}
+
+li{
+    border-bottom: solid 1px whitesmoke;
+    padding:10px;
+    width:100%;
+    cursor: pointer;
+}
