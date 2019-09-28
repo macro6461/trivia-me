@@ -34,7 +34,7 @@ const Question = (props) =>{
                                         <Button type="danger" onClick={(e)=>{props.onDeleteA(e, answer)}}>Delete</Button>
                                     </div>}
                                 onClick={(e)=>{e.stopPropagation()}}
-                                onVisibleChange={(e)=>{props.resetDeleteA(e)}}
+                                onVisibleChange={(e)=>{props.resetA(e)}}
                             >
                     <Icon type='delete' onClick={(e)=>{props.setDeleteA(answer, e)}} style={{marginLeft: 10, cursor: 'pointer'}}/>
                     </Popover>

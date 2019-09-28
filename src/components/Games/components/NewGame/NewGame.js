@@ -123,15 +123,7 @@ class NewGame extends Component{
 
     };
 
-    resetEditQ = (e) =>{
-        if (e === false){
-            this.setState({
-                editQ: null
-            })
-        }
-    };
-
-    setDeleteQ = (question, e) =>{
+    setDeleteQ = (question, e) => {
         e.stopPropagation();
             this.setState({
                 deleteQ: question,
@@ -139,21 +131,24 @@ class NewGame extends Component{
             })
     };
 
-    resetDeleteQ = (e) =>{
-        if (e === false){
+    resetQ = (e) =>{
+        debugger
+        if (e !== true){
             this.setState({
-                deleteQ: null
+                deleteQ: null,
+                editQ: null
             })
         }
     };
 
     deleteQ = (e) => { 
+        debugger
         e.stopPropagation()
         var questions = this.state.questions.filter((x)=>{return x.id !== this.state.deleteQ.id})
         this.setState({
             questions
         }, ()=>{
-            this.resetDeleteQ(e)
+            this.resetQ(e)
         })
     }
 
@@ -204,14 +199,6 @@ class NewGame extends Component{
             })
     };
 
-    resetEditA = (e) =>{
-        if (e === false){
-            this.setState({
-                editA: null
-            })
-        }
-    };
-
     deleteA = (e) => { 
         e.stopPropagation()
         var question = this.state.questions.find((x)=>{return x.id ===this.state.answersQuestion});
@@ -228,14 +215,15 @@ class NewGame extends Component{
         this.setState({
             questions
         }, ()=>{
-            this.resetDeleteA(e)
+            this.resetA(e)
         })
     }
 
-    resetDeleteA = (e) =>{
+    resetA = (e) =>{
         if (e === false){
             this.setState({
-                deleteA: null
+                deleteA: null,
+                editA: null
             })
         }
     };
@@ -331,7 +319,7 @@ class NewGame extends Component{
                                         <Button type="danger" onClick={this.deleteQ}>Delete</Button>
                                     </div>}
                                 onClick={(e)=>{e.stopPropagation()}}
-                                onVisibleChange={(e)=>{this.resetDeleteQ(e)}}
+                                onVisibleChange={(e)=>{this.resetQ(e)}}
                             >
                                 <Icon type="delete" onClick={(e)=>{this.setDeleteQ(question, e)}}/>
                             </Popover>
@@ -355,7 +343,7 @@ class NewGame extends Component{
                              submitEditAnswer={this.submitEditAnswer}
                              deleteA={this.state.deleteA}
                              onDeleteA={this.deleteA}
-                             resetDeleteA={this.resetDeleteA}
+                             resetA={this.resetA}
                              setDeleteA={this.setDeleteA}
             /></Panel>
         });
