@@ -1,29 +1,44 @@
 import React from 'react';
-import {Input, Button, Radio, Tooltip, Modal, Popconfirm, Icon} from 'antd';
+import {Input, Button, Radio, Tooltip, Modal, Popover, Icon} from 'antd';
 
 const Question = (props) =>{
 
     const {question, index, currentQ, currentA, editQ, editA, correct} = props;
-
-    const updateEditA = (e, answer) =>{
-        props.setEditA(e, answer)
-    }
-
-    debugger
 
     return (
           <div>
           <h4 style={{textAlign: 'center'}}>Answers</h4>
           <Radio.Group onChange={(e)=>{props.addFinalAnswer(question.id, e)}}>
               {question.qAnswers.map((answer, i)=>{
-                  return <div>
+                  var backgroundColor = answer.aId === correct ? '#00A86B' : '';
+                  var color = answer.aId === correct ? 'white' : ''
+                  return <div style={{margin: 5}}>
                       <Tooltip title="Mark as correct answer." key={answer.aId} placement="left">
-                          <Radio value={answer.aId} style={{marginRight: 10}}>
+                          <Radio.Button value={answer.aId} style={{marginRight: 10, backgroundColor}}>
+
+                          <Icon type="check" style={{color}}/>
                         
-                      </Radio>
+                      </Radio.Button>
                   </Tooltip>
                   {i + 1 + '. ' + answer.aContent}
-                          <Icon type='setting' onClick={(e)=>{updateEditA(e, answer)}} style={{marginLeft: 10}}/>
+                  <Tooltip title="Edit answer."><Icon type='edit' onClick={(e)=>{props.setEditA(e, answer)}} style={{marginLeft: 10}}/></Tooltip> 
+                  <Tooltip title="Remove answer.">
+                  <Popover
+                                title="Remove Answer"
+                                trigger="click"
+                                visible={props.deleteA === answer}
+                                content={
+                                    <div style={{margin: 10}}>
+                                        <p>{`Are you sure you want to remove '${answer.aContent}'?`}</p>
+                                        <Button onClick={(e)=>{props.setDeleteA(null, e)}} style={{marginRight: 10}}>No</Button>
+                                        <Button type="danger" onClick={(e)=>{props.onDeleteA(e, answer)}}>Delete</Button>
+                                    </div>}
+                                onClick={(e)=>{e.stopPropagation()}}
+                                onVisibleChange={(e)=>{props.resetDeleteA(e)}}
+                            >
+                    <Icon type='delete' onClick={(e)=>{props.setDeleteA(answer, e)}} style={{marginLeft: 10, cursor: 'pointer'}}/>
+                    </Popover>
+                  </Tooltip>
                   </div>
               })}
           </Radio.Group>
@@ -45,7 +60,7 @@ const Question = (props) =>{
             style={{marginTop: 100}}
             visible={!!props.editA}
             footer={<div style={{margin: 10}}>
-            <Button onClick={(e)=>{props.setEditA(null, e)}} style={{marginRight: 10}}>Cancel</Button>
+            <Button onClick={(e)=>{props.setEditA(e, null)}} style={{marginRight: 10}}>Cancel</Button>
             <Button type="primary" onClick={(e)=>{props.submitEditAnswer(e)}}>Edit</Button>
         </div>}
             >

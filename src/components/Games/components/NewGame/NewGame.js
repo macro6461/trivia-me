@@ -29,7 +29,12 @@ class NewGame extends Component{
 
     addQuestion = () =>{
         var obj = {};
-        obj['id'] = this.state.questions.length + 1;
+        var qs = this.state.questions;
+        //calculate the highest id then add one for new obj
+        var ids = qs.map((x)=>{return x.id})
+        var highestId = ids.length > 0 ? (ids.sort((a, b)=>{return b - a})[0] + 1) : 1
+        //
+        obj['id'] = highestId;
         obj['qTitle'] = this.state.currentQ;
         obj['qAnswers'] = [];
         obj['answer'] = '';
@@ -46,7 +51,12 @@ class NewGame extends Component{
 
         var questions = this.state.questions;
         var question = questions.find((x)=>{return x.id === this.state.answersQuestion});
-        obj['aId'] = question.qAnswers.length + 1;
+
+        //calculate the highest id then add one for new obj
+        var ids = question.qAnswers.map((x)=>{return x.aId})
+        var highestId = ids.length > 0 ? (ids.sort((a, b)=>{return b - a})[0] + 1) : 1
+        //
+        obj['aId'] = highestId;
         obj['aContent'] = this.state.currentA;
         var index = questions.indexOf(question);
 
@@ -60,7 +70,6 @@ class NewGame extends Component{
     };
 
     addFinalAnswer = (x, c) =>{
-        debugger
         var questions = this.state.questions;
         var question = questions.find((q)=>{return q.id === x});
         var index = questions.indexOf(question);
@@ -163,17 +172,16 @@ class NewGame extends Component{
     // EDITING ANSWERS
 
     setEditA = (e, answer) => {
-        debugger
         e.stopPropagation();
             this.setState({
                 editA: answer
             })
     };
 
-    setDeleteA = (question, e) =>{
+    setDeleteA = (answer, e) =>{
         e.stopPropagation();
             this.setState({
-                deleteA: question
+                deleteA: answer
             })
     };
 
@@ -184,6 +192,26 @@ class NewGame extends Component{
             })
         }
     };
+
+    deleteA = (e) => { 
+        e.stopPropagation()
+        var question = this.state.questions.find((x)=>{return x.id ===this.state.answersQuestion});
+        var index = this.state.questions.indexOf(question);
+        var answers = question.qAnswers.filter((a)=>{return a.aId !==this.state.deleteA.aId})
+        question.qAnswers = answers;
+        //reset correct answer if correct answer is deleted
+        if (question.answer === this.state.deleteA.aId){
+            question.answer = ""
+        }
+        var questions = this.state.questions
+        questions[index] = question
+
+        this.setState({
+            questions
+        }, ()=>{
+            this.resetDeleteA(e)
+        })
+    }
 
     resetDeleteA = (e) =>{
         if (e === false){
@@ -217,7 +245,6 @@ class NewGame extends Component{
         var aIndex = q.qAnswers.indexOf(a);
         q.qAnswers[aIndex] = this.state.editA;
         questions[index] = q
-        debugger
         this.setState({
             questions
         }, ()=>{
@@ -226,7 +253,6 @@ class NewGame extends Component{
       };
 
     closeEditA = (e) =>{
-        debugger
         e.stopPropagation();
         this.setState({
             editA: null
@@ -255,14 +281,14 @@ class NewGame extends Component{
             var correct = question.answer;
             return <Panel header={i + 1 + '. ' + question.qTitle} key={question.id} extra={
                         <div>
-                            <Icon type="setting" onClick={(e)=>{this.setEditQ(question, e)}} style={{marginRight: 10}}/>
+                            <Icon type="edit" onClick={(e)=>{this.setEditQ(question, e)}} style={{marginRight: 10}}/>
                             <Popover
                                 title="Delete Question"
                                 trigger="click"
                                 visible={this.state.deleteQ === question}
                                 content={
                                     <div style={{margin: 10}}>
-                                        <p>{`Are you sure you want to delete ${this.state.deleteQ ? this.state.deleteQ.qTitle : ''}?`}</p>
+                                        <p>{`Are you sure you want to delete '${question.qTitle}'?`}</p>
                                         <Button onClick={(e)=>{this.setDeleteQ(null, e)}} style={{marginRight: 10}}>No</Button>
                                         <Button type="danger" onClick={this.deleteQ}>Delete</Button>
                                     </div>}
@@ -289,6 +315,10 @@ class NewGame extends Component{
                              setEditA={this.setEditA}
                              updateEditAName={this.updateEditAName}
                              submitEditAnswer={this.submitEditAnswer}
+                             deleteA={this.state.deleteA}
+                             onDeleteA={this.deleteA}
+                             resetDeleteA={this.resetDeleteA}
+                             setDeleteA={this.setDeleteA}
             /></Panel>
         });
 
