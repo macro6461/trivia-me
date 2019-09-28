@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Modal, Input, Button, Collapse, Radio, Tooltip, Popover, Icon} from 'antd';
+import {Modal, Input, Button, Collapse, Radio, Tooltip, Popover, Icon, notification}  from 'antd';
 import Question from '../Question/Question.js';
 import './NewGame.css';
 
@@ -19,6 +19,7 @@ class NewGame extends Component{
         deleteQ: null,
         editA: null,
         deleteA: null,
+        error: null
     };
 
     updateCurrent = (x, directive) =>{
@@ -28,45 +29,63 @@ class NewGame extends Component{
     };
 
     addQuestion = () =>{
-        var obj = {};
-        var qs = this.state.questions;
-        //calculate the highest id then add one for new obj
-        var ids = qs.map((x)=>{return x.id})
-        var highestId = ids.length > 0 ? (ids.sort((a, b)=>{return b - a})[0] + 1) : 1
-        //
-        obj['id'] = highestId;
-        obj['qTitle'] = this.state.currentQ;
-        obj['qAnswers'] = [];
-        obj['answer'] = '';
-        var questions = this.state.questions;
-        questions.push(obj);
-        this.setState({
-            questions,
-            currentQ: ''
-        });
+        var questionTitles = this.state.questions.map((question)=>{
+            return question.qTitle.toLowerCase()
+        })
+
+        if (!questionTitles.includes(this.state.currentQ.toLowerCase())){
+            var obj = {};
+            var qs = this.state.questions;
+            //calculate the highest id then add one for new obj
+            var ids = qs.map((x)=>{return x.id})
+            var highestId = ids.length > 0 ? (ids.sort((a, b)=>{return b - a})[0] + 1) : 1
+            //
+            obj['id'] = highestId;
+            obj['qTitle'] = this.state.currentQ;
+            obj['qAnswers'] = [];
+            obj['answer'] = '';
+            var questions = this.state.questions;
+            questions.push(obj);
+            this.setState({
+                questions,
+                currentQ: ''
+            });
+        } else {
+            this.notifyConflict('Question title is already in use. Please choose a unique title.')
+        }
     };
 
     addAnswer = () =>{
+
         var obj = {};
 
         var questions = this.state.questions;
         var question = questions.find((x)=>{return x.id === this.state.answersQuestion});
 
-        //calculate the highest id then add one for new obj
-        var ids = question.qAnswers.map((x)=>{return x.aId})
-        var highestId = ids.length > 0 ? (ids.sort((a, b)=>{return b - a})[0] + 1) : 1
-        //
-        obj['aId'] = highestId;
-        obj['aContent'] = this.state.currentA;
-        var index = questions.indexOf(question);
+        var answerContents = question.qAnswers.map((x)=>{
+            return x.aContent.toLowerCase()
+        })
 
-        question.qAnswers.push(obj);
-        questions[index] = question;
+        if (!answerContents.includes(this.state.currentA.toLowerCase())){
+            //calculate the highest id then add one for new obj
+            var ids = question.qAnswers.map((x)=>{return x.aId})
+            var highestId = ids.length > 0 ? (ids.sort((a, b)=>{return b - a})[0] + 1) : 1
+            //
+            obj['aId'] = highestId;
+            obj['aContent'] = this.state.currentA;
+            var index = questions.indexOf(question);
 
-        this.setState({
-            questions,
-            currentA: ''
-        });
+            question.qAnswers.push(obj);
+            questions[index] = question;
+
+            this.setState({
+                questions,
+                currentA: ''
+            });
+        } else {
+            this.notifyConflict('This answer is already in use. Please write a unique answer.')
+        }
+
     };
 
     addFinalAnswer = (x, c) =>{
@@ -264,15 +283,34 @@ class NewGame extends Component{
     };
 
     onSubmit = () =>{
-        var game = {};
-        game['id'] = this.props.games.length + 1;
-        game['name'] = this.state.name;
-        game['timed'] = this.state.timed;
-        game['correct']= null;
-        game['questions'] = this.state.questions;
-        this.props.onOk(game);
-        this.props.onCancel();
+
+        var gameNames = this.props.games.map((game)=>{
+            return game.name.toLowerCase()
+        })
+
+        if (!gameNames.includes(this.state.name.toLowerCase())){
+            var game = {};
+            //calculate the highest id then add one for new obj
+            var ids = this.props.games.map((x)=>{return x.id})
+            var highestId = ids.length > 0 ? (ids.sort((a, b)=>{return b - a})[0] + 1) : 1
+            //
+            game['id'] = highestId;
+            game['name'] = this.state.name;
+            game['timed'] = this.state.timed;
+            game['correct']= null;
+            game['questions'] = this.state.questions;
+            this.props.onOk(game);
+            this.props.onCancel();
+        } else {
+            this.notifyConflict('Game name already is use. Please choose a unique name.')
+        }
     };
+
+    notifyConflict = (msg) =>{
+        notification.error({
+            message: msg
+        })
+    }
 
 
     render(){
