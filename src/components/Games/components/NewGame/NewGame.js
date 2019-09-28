@@ -60,6 +60,7 @@ class NewGame extends Component{
     };
 
     addFinalAnswer = (x, c) =>{
+        debugger
         var questions = this.state.questions;
         var question = questions.find((q)=>{return q.id === x});
         var index = questions.indexOf(question);
@@ -83,16 +84,7 @@ class NewGame extends Component{
             })
     };
 
-    onSubmit = () =>{
-        var game = {};
-        game['id'] = this.props.games.length + 1;
-        game['name'] = this.state.name;
-        game['timed'] = this.state.timed;
-        game['correct']= null;
-        game['questions'] = this.state.questions;
-        this.props.onOk(game);
-        this.props.onCancel();
-    };
+    // EDITING QUESTIONS
 
     setEditQ = (question, e) => {
         e.stopPropagation();
@@ -103,12 +95,28 @@ class NewGame extends Component{
 
     };
 
+    resetEditQ = (e) =>{
+        if (e === false){
+            this.setState({
+                editQ: null
+            })
+        }
+    };
+
     setDeleteQ = (question, e) =>{
         e.stopPropagation();
             this.setState({
                 deleteQ: question,
                 answersQuestion: null
             })
+    };
+
+    resetDeleteQ = (e) =>{
+        if (e === false){
+            this.setState({
+                deleteQ: null
+            })
+        }
     };
 
     deleteQ = (e) => { 
@@ -121,22 +129,6 @@ class NewGame extends Component{
         })
     }
 
-    resetDeleteQ = (e) =>{
-        if (e === false){
-            this.setState({
-                deleteQ: null
-            })
-        }
-    };
-
-    resetEditQ = (e) =>{
-        if (e === false){
-            this.setState({
-                editQ: null
-            })
-        }
-    };
-
     updateEditQName = (e, question) =>{
         var obj = {};
         obj['id'] = question.id;
@@ -146,10 +138,6 @@ class NewGame extends Component{
         this.setState({
             editQ: obj
         })
-    };
-
-    updateEditQAnswers = (question, e) =>{
-
     };
 
     submitEditQuestion = (e) =>{
@@ -165,10 +153,6 @@ class NewGame extends Component{
       })
     };
 
-    editAnswer = (answer, e)=>{
-        
-    };
-
     closeEditQ = (e) =>{
         e.stopPropagation();
         this.setState({
@@ -176,14 +160,92 @@ class NewGame extends Component{
         })
     };
 
-    onRemoveQ = (e) =>{
+    // EDITING ANSWERS
+
+    setEditA = (e, answer) => {
+        debugger
         e.stopPropagation();
-        var questions = this.state.questions.filter((x)=>{return x.id !== this.state.editQ.id});
+            this.setState({
+                editA: answer
+            })
+    };
+
+    setDeleteA = (question, e) =>{
+        e.stopPropagation();
+            this.setState({
+                deleteA: question
+            })
+    };
+
+    resetEditA = (e) =>{
+        if (e === false){
+            this.setState({
+                editA: null
+            })
+        }
+    };
+
+    resetDeleteA = (e) =>{
+        if (e === false){
+            this.setState({
+                deleteA: null
+            })
+        }
+    };
+
+    updateEditAName = (e, answer) =>{
+        var question = this.state.questions.find((x)=>{return x.id ===this.state.answersQuestion});
+        var answer = question.qAnswers.find((x)=>{return x.aId === answer.aId});
+        var index = question.qAnswers.indexOf(answer);
+
+        var obj = {};
+        obj['aId'] = answer.aId;
+        obj['aContent'] = e.target.value;
+
+        this.setState({
+            editA: obj
+        })
+       
+    };
+
+    submitEditAnswer = (e) =>{
+        e.stopPropagation();
+        var questions = this.state.questions
+        var q = questions.find((x)=>{return x.id === this.state.answersQuestion});
+        var index = questions.indexOf(q)
+        var a = q.qAnswers.find((x)=>{return x.aId === this.state.editA.aId});
+        var aIndex = q.qAnswers.indexOf(a);
+        q.qAnswers[aIndex] = this.state.editA;
+        questions[index] = q
+        debugger
         this.setState({
             questions
         }, ()=>{
-            this.closeEditQ(e)
+          this.closeEditA(e)
         })
+      };
+
+    closeEditA = (e) =>{
+        debugger
+        e.stopPropagation();
+        this.setState({
+            editA: null
+        })
+    };
+
+    editAnswer = (answer, e)=>{
+        
+    };
+
+    onSubmit = () =>{
+        var game = {};
+        game['id'] = this.props.games.length + 1;
+        game['name'] = this.state.name;
+        game['timed'] = this.state.timed;
+        game['correct']= null;
+        game['questions'] = this.state.questions;
+        this.props.onOk(game);
+        this.props.onCancel();
     };
 
 
@@ -223,6 +285,10 @@ class NewGame extends Component{
                              addAnswer={this.addAnswer}
                              question={question}
                              index={i}
+                             editA={this.state.editA}
+                             setEditA={this.setEditA}
+                             updateEditAName={this.updateEditAName}
+                             submitEditAnswer={this.submitEditAnswer}
             /></Panel>
         });
 
@@ -267,7 +333,7 @@ class NewGame extends Component{
                         {this.state.questions.length > 0
                             ? <Collapse onChange={this.updateAnswersQuestion}
                                         accordion={true}
-                                        activeKey={!this.state.editQ && !this.state.editA && !this.state.deleteQ && !this.state.deleteA ? this.state.answersQuestion : null}>
+                                        activeKey={!this.state.editQ  && !this.state.deleteQ ? this.state.answersQuestion : null}>
                                 {questions}
                             </Collapse>
                             : null
