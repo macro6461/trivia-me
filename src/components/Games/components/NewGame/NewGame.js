@@ -19,7 +19,8 @@ class NewGame extends Component{
         deleteQ: null,
         editA: null,
         deleteA: null,
-        error: null
+        error: null,
+        exclude: false
     };
 
     updateCurrent = (x, directive) =>{
@@ -117,6 +118,7 @@ class NewGame extends Component{
     setEditQ = (question, e) => {
         e.stopPropagation();
             this.setState({
+                deleteQ: null,
                 editQ: question,
                 answersQuestion: null
             })
@@ -127,12 +129,12 @@ class NewGame extends Component{
         e.stopPropagation();
             this.setState({
                 deleteQ: question,
+                editQ: null,
                 answersQuestion: null
             })
     };
 
     resetQ = (e) =>{
-        debugger
         if (e !== true){
             this.setState({
                 deleteQ: null,
@@ -142,7 +144,6 @@ class NewGame extends Component{
     };
 
     deleteQ = (e) => { 
-        debugger
         e.stopPropagation()
         var questions = this.state.questions.filter((x)=>{return x.id !== this.state.deleteQ.id})
         this.setState({
@@ -158,6 +159,7 @@ class NewGame extends Component{
         obj['qTitle'] = e.target.value;
         obj['qAnswers'] = question.qAnswers;
         obj['answer'] = question.answer
+        debugger
         this.setState({
             editQ: obj
         })
@@ -179,15 +181,18 @@ class NewGame extends Component{
     closeEditQ = (e) =>{
         e.stopPropagation();
         this.setState({
-            editQ: null
+            editQ: null,
+            deleteQ: null
         })
     };
 
     // EDITING ANSWERS
 
     setEditA = (e, answer) => {
+        debugger
         e.stopPropagation();
             this.setState({
+                deleteA: null,
                 editA: answer
             })
     };
@@ -195,6 +200,7 @@ class NewGame extends Component{
     setDeleteA = (answer, e) =>{
         e.stopPropagation();
             this.setState({
+                editA: null,
                 deleteA: answer
             })
     };
@@ -262,12 +268,9 @@ class NewGame extends Component{
     closeEditA = (e) =>{
         e.stopPropagation();
         this.setState({
-            editA: null
+            editA: null,
+            deleteA: null
         })
-    };
-
-    editAnswer = (answer, e)=>{
-        
     };
 
     onSubmit = () =>{
@@ -300,14 +303,37 @@ class NewGame extends Component{
         })
     }
 
+    updateExclude = (x) =>{
+        debugger
+        this.setState({
+            exclude: x
+        })
+    }
+
 
     render(){
 
         var questions = this.state.questions.map((question, i)=>{
             var correct = question.answer;
-            return <Panel header={i + 1 + '. ' + question.qTitle} key={question.id} extra={
-                        <div>
-                            <Icon type="edit" onClick={(e)=>{this.setEditQ(question, e)}} style={{marginRight: 10}}/>
+            return <Panel header={<div style={{display: 'inline-block'}}>
+                {this.state.editQ && this.state.editQ.id === question.id
+                    ? <Input
+                    autoFocus
+                    value={this.state.editQ ? this.state.editQ.qTitle : ''}
+                    onChange={(e) => {
+                        this.updateEditQName(e, this.state.editQ)
+                }}
+                onPressEnter={(e)=>{this.submitEditQuestion(e)}}
+                onBlur={!this.state.exclude ? (e)=>{this.setEditQ(null, e)} : null}
+                />
+                : i + 1 + '. ' + question.qTitle
+                }
+                </div>} key={question.id} extra={
+                        <div onMouseEnter={()=>{this.updateExclude(true)}} onMouseLeave={()=>{this.updateExclude(false)}}>
+                            {this.state.editQ && this.state.editQ.id === question.id
+                                ? <Icon type="save" onClick={(e)=>{this.submitEditQuestion(e)}} style={{marginRight: 10}}/>
+                                : <Icon type="edit" onClick={(e)=>{this.setEditQ(question, e)}} style={{marginRight: 10}}/>
+                            }
                             <Popover
                                 title="Delete Question"
                                 trigger="click"
@@ -345,6 +371,8 @@ class NewGame extends Component{
                              onDeleteA={this.deleteA}
                              resetA={this.resetA}
                              setDeleteA={this.setDeleteA}
+                             updateExclude={this.updateExclude}
+                             exclude={this.state.exclude}
             /></Panel>
         });
 
@@ -381,7 +409,8 @@ class NewGame extends Component{
                    onCancel={this.props.onCancel}
                    footer={footer}
             >
-                Name: <Input value={this.state.name} onChange={(e)=>{this.updateName(e)}} allowClear style={{width: 85 + '%'}}/>
+                Name: <Input value={this.state.name} 
+                onChange={(e)=>{this.updateName(e)}} style={{width: 85 + '%'}}/>
                 <br/>
                 {this.state.name.length > 0
                     ? <div>
@@ -396,7 +425,7 @@ class NewGame extends Component{
                         }
                         {this.state.questions.length <= 4
                             ? <div style={{marginTop: 10, marginBottom: 10}}><Input value={this.state.currentQ}
-                                                                                            allowClear
+                                                                                            onPressEnter={this.addQuestion} 
                                                                                             placeholder={`Question ${this.state.questions.length + 1} `}
                                                                                             onChange={(e) => {
                                                                                                 this.updateCurrent(e, 'currentQ')
@@ -411,10 +440,10 @@ class NewGame extends Component{
                     </div>
                     :null
                 }
-                <Modal
+                {/* <Modal
                 title="Edit Question"
                 style={{marginTop: 100}}
-                visible={!!this.state.editQ}
+                visible={false}
                 footer={<div style={{margin: 10}}>
                 <Button onClick={(e)=>{this.setEditQ(null, e)}} style={{marginRight: 10}}>Cancel</Button>
                 <Button type="primary" onClick={(e)=>{this.submitEditQuestion(e)}}>Edit</Button>
@@ -425,7 +454,8 @@ class NewGame extends Component{
                                    onChange={(e) => {
                                        this.updateEditQName(e, this.state.editQ)
                                }}/>
-                </Modal>
+                </Modal> */}
+
             </Modal>
         )
     }

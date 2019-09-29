@@ -3,7 +3,7 @@ import {Input, Button, Radio, Tooltip, Modal, Popover, Icon} from 'antd';
 
 const Question = (props) =>{
 
-    const {question, index, currentQ, currentA, editQ, editA, correct} = props;
+    const {question, index, currentQ, currentA, editQ, editA, correct, updateExclude} = props;
 
     return (
           <div>
@@ -12,7 +12,7 @@ const Question = (props) =>{
               {question.qAnswers.map((answer, i)=>{
                   var backgroundColor = answer.aId === correct ? '#00A86B' : '';
                   var color = answer.aId === correct ? 'white' : ''
-                  return <div style={{margin: 5}}>
+                  return <div style={{margin: 5}} onMouseEnter={(e)=>{updateExclude(true)}} onMouseLeave={(e)=>{updateExclude(false)}} >
                       <Tooltip title="Mark as correct answer." key={answer.aId} placement="left">
                           <Radio.Button value={answer.aId} style={{marginRight: 10, backgroundColor}}>
 
@@ -20,8 +20,24 @@ const Question = (props) =>{
                         
                       </Radio.Button>
                   </Tooltip>
-                  {i + 1 + '. ' + answer.aContent}
-                  <Tooltip title="Edit answer."><Icon type='edit' onClick={(e)=>{props.setEditA(e, answer)}} style={{marginLeft: 10}}/></Tooltip> 
+                  <div style={{display: 'inline-block'}} >
+                    { props.editA && props.editA.aId === answer.aId
+                      ? <Input value={props.editA ? props.editA.aContent : ''}
+                      autoFocus
+                      onChange={(e) => {
+                          props.updateEditAName(e, props.editA)
+                    }}
+                        onPressEnter={(e)=>{props.submitEditAnswer(e)}}
+                        onBlur={!props.exclude ? (e)=>{props.setEditA(e, null)} : null}
+                    />
+                        : i + 1 + '. ' + answer.aContent
+                    }
+                    </div>
+                    <div style={{display: 'inline-block'}}>
+                    { props.editA && props.editA.aId === answer.aId
+                        ? <Icon type="save" onClick={(e)=>{props.submitEditAnswer(e)}} style={{marginLeft: 10}}/>
+                        : <Tooltip title="Edit answer."><Icon type='edit' onClick={(e)=>{props.setEditA(e, answer)}} style={{marginLeft: 10}}/></Tooltip> 
+                    }
                   <Tooltip title="Remove answer.">
                   <Popover
                                 title="Remove Answer"
@@ -40,12 +56,13 @@ const Question = (props) =>{
                     </Popover>
                   </Tooltip>
                   </div>
+                  </div>
               })}
           </Radio.Group>
           {question.qAnswers.length <= 4
               ? <div> <Input value={currentA}
                              placeholder={`Answer ${question.qAnswers.length + 1}`}
-                             allowClear
+                             
                              onChange={(e) => {props.updateCurrent(e, 'currentA')}}/>
                   <div style={{width: 100 + '%', textAlign: 'right'}}>
                       <Button onClick={props.addAnswer} disabled={currentA.length <= 0} style={{marginTop: 10}}>Add Answer</Button>
@@ -55,7 +72,7 @@ const Question = (props) =>{
           }
 
 
-        <Modal
+        {/* <Modal
             title="Edit Answer"
             style={{marginTop: 100}}
             visible={!!props.editA}
@@ -69,7 +86,7 @@ const Question = (props) =>{
                                 onChange={(e) => {
                                     props.updateEditAName(e, props.editA)
                             }}/>
-        </Modal>
+        </Modal> */}
       </div>
     )
 };
