@@ -34,6 +34,27 @@ const games = handleActions({
         });
         return {...state, loading: false}
     },
+    ['games/editGame'](state, action) {
+        return {...state, loading: true}
+    },
+    ['games/editGame/success'](state, action) {
+        var games = state.games;
+        var game = games.find((x)=>{
+            return x.id === action.payload.id
+        });
+        var index = games.indexOf(game);
+        games[index] = action.payload;
+        
+        notification.success({
+            message: `${action.payload.name} has been updated successfully.`
+        });
+        return {...state, games, loading: false}
+    },['games/editGame/fail'](state, action) {
+        notification.success({
+            message: 'Game could not be updated.'
+        });
+        return {...state, loading: false}
+    },
     ['games/deleteGame'](state, action) {
         return {...state, loading: true}
     },

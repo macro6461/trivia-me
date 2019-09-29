@@ -304,7 +304,11 @@ class GameModal extends Component{
             var ids = this.props.games.map((x)=>{return x.id})
             var highestId = ids.length > 0 ? (ids.sort((a, b)=>{return b - a})[0] + 1) : 1
             //
-            game['id'] = highestId;
+            if (this.props.game){
+                game['id'] = this.props.game.id
+            } else {
+                game['id'] = highestId;
+            }
             game['name'] = this.state.name;
             game['timed'] = this.state.timed;
             game['correct']= null;

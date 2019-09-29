@@ -17,6 +17,13 @@ const mapDispatchToProps = ( dispatch ) => {
             const action = actionCreator(game);
             dispatch(action);
         },
+        editGame(game) {
+            const actionCreator = createAction(
+                "games/editGame"
+            );
+            const action = actionCreator(game);
+            dispatch(action);
+        },
         deleteGame(id) {
             const actionCreator = createAction(
                 "games/deleteGame"

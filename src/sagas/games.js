@@ -3,6 +3,7 @@ import { call, put, takeLatest, all, delay } from "redux-saga/effects";
 const watchers = [
     takeLatest("games/getGame", getGame),
     takeLatest("games/newGame", newGame),
+    takeLatest("games/editGame", editGame),
     takeLatest("games/deleteGame", deleteGame),
 ];
 
@@ -29,6 +30,19 @@ function* newGame(action) {
 
     yield put({
         type: 'games/newGame/success',
+        payload: action.payload
+    });
+
+    // yield put({
+    //     type: 'games/newGame/fail',
+    //     payload: action.payload
+    // })
+}
+
+function* editGame(action) {
+
+    yield put({
+        type: 'games/editGame/success',
         payload: action.payload
     });
 

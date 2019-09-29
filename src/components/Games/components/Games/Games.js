@@ -35,6 +35,7 @@ class Games extends Component{
     };
 
     editGame = (game) => {
+        debugger
         this.props.editGame(game);
         this.closeModal('showEdit')
     };
