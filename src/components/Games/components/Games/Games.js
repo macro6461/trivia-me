@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import NewGame from '../NewGame/NewGame.js';
-import EditGame from '../EditGame/EditGame.js';
+// import NewGame from '../NewGame/NewGame.js';
+// import EditGame from '../EditGame/EditGame.js';
+import GameModal from '../GameModal/GameModal.js';
 import './Games.scss';
 import {Modal, Icon, Tooltip, Button} from 'antd';
 
@@ -83,14 +84,21 @@ class Games extends Component{
                     </Modal>
                     : null
                 }
-                {this.state.showEdit
+                {this.state.showEdit || this.state.showNew
+                 ? <GameModal onEditGame={this.editGame} 
+                                game={this.state.selectedGame} 
+                                onCancel={this.state.showEdit ? ()=>{this.closeModal('showEdit')} : ()=>{this.closeModal('showNew')}}
+                                gameType={this.state.showEdit ? 'Edit Game' : 'New Game'}
+                                games={this.props.games}
+                                onOk={this.state.showEdit ? this.editGame : this.newGame }
+                                />
+                 : null
+                }
+
+                {/* {this.state.showEdit
                     ? <EditGame onEditGame={this.editGame} game={this.state.selectedGame} onCancel={()=>{this.closeModal('showEdit')}}/>
                     : null
-                }
-                {this.state.showNew
-                    ? <NewGame onOk={this.newGame} onCancel={()=>{this.closeModal('showNew')}} games={this.props.games}/>
-                    : null
-                }
+                }*/}
                 <div className="header-and-new">
                     <h1>My Games</h1> <Button onClick={()=>{this.selectGame('showNew')}} className="header-and-new-button"><Icon type="plus-square"/> New Game</Button>
                 </div>

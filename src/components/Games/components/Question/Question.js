@@ -70,23 +70,6 @@ const Question = (props) =>{
               </div>
               : null
           }
-
-
-        {/* <Modal
-            title="Edit Answer"
-            style={{marginTop: 100}}
-            visible={!!props.editA}
-            footer={<div style={{margin: 10}}>
-            <Button onClick={(e)=>{props.setEditA(e, null)}} style={{marginRight: 10}}>Cancel</Button>
-            <Button type="primary" onClick={(e)=>{props.submitEditAnswer(e)}}>Edit</Button>
-        </div>}
-            >
-            <Input value={props.editA ? props.editA.aContent : ''}
-                                allowClear
-                                onChange={(e) => {
-                                    props.updateEditAName(e, props.editA)
-                            }}/>
-        </Modal> */}
       </div>
     )
 };

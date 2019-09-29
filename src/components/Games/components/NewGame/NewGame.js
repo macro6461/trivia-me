@@ -159,7 +159,6 @@ class NewGame extends Component{
         obj['qTitle'] = e.target.value;
         obj['qAnswers'] = question.qAnswers;
         obj['answer'] = question.answer
-        debugger
         this.setState({
             editQ: obj
         })
@@ -189,7 +188,6 @@ class NewGame extends Component{
     // EDITING ANSWERS
 
     setEditA = (e, answer) => {
-        debugger
         e.stopPropagation();
             this.setState({
                 deleteA: null,
@@ -304,7 +302,6 @@ class NewGame extends Component{
     }
 
     updateExclude = (x) =>{
-        debugger
         this.setState({
             exclude: x
         })

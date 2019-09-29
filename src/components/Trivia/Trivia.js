@@ -25,7 +25,6 @@ export default class Trivia extends Component {
     };
 
     recordAnswers = (qnId, aId) =>{
-        debugger
         var userJourney = this.state.userJourney
         var q = userJourney.find((x)=>{
             return x.qId === qnId

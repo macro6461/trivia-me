@@ -49,8 +49,6 @@ const TriviaQuestion = function TriviaQuestion(props) {
         setTimeout(()=>{
             props.recordAnswers(props.qId, parseInt(label.id.split("-")[1]))
         }, 300);
-
-        debugger
     };
 
     var display = "none";
