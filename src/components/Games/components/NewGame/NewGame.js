@@ -440,21 +440,6 @@ class NewGame extends Component{
                     </div>
                     :null
                 }
-                {/* <Modal
-                title="Edit Question"
-                style={{marginTop: 100}}
-                visible={false}
-                footer={<div style={{margin: 10}}>
-                <Button onClick={(e)=>{this.setEditQ(null, e)}} style={{marginRight: 10}}>Cancel</Button>
-                <Button type="primary" onClick={(e)=>{this.submitEditQuestion(e)}}>Edit</Button>
-            </div>}
-                >
-                <Input value={this.state.editQ ? this.state.editQ.qTitle : ''}
-                                   allowClear
-                                   onChange={(e) => {
-                                       this.updateEditQName(e, this.state.editQ)
-                               }}/>
-                </Modal> */}
 
             </Modal>
         )
