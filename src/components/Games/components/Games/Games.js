@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-// import NewGame from '../NewGame/NewGame.js';
-// import EditGame from '../EditGame/EditGame.js';
 import GameModal from '../GameModal/GameModal.js';
 import './Games.scss';
 import {Modal, Icon, Tooltip, Button} from 'antd';
@@ -12,7 +10,7 @@ class Games extends Component{
         selectedGame: null,
         showDelete: false,
         showEdit: false,
-        showNew: false,
+        showNew: false
     };
 
     selectGame = (id, directive) =>{
@@ -35,7 +33,6 @@ class Games extends Component{
     };
 
     editGame = (game) => {
-        debugger
         this.props.editGame(game);
         this.closeModal('showEdit')
     };
@@ -47,7 +44,10 @@ class Games extends Component{
 
     closeModal = (directive) =>{
         this.setState({
-            [directive]: false
+            showEdit: false,
+            showDelete: false,
+            showNew: false,
+            selectedGame: null
         })
     };
 

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Modal, Input, Button, Collapse, Radio, Tooltip, Popover, Icon, notification}  from 'antd';
 import Question from '../Question/Question.js';
 import './GameModal.css';
+import { NONAME } from 'dns';
 
 const { Panel } = Collapse;
 
@@ -121,7 +122,7 @@ class GameModal extends Component{
         })
     };
 
-    updateAnswersQuestion = (x) =>{
+    updateAnswersQuestion = (x) => {
             var answersQuestion = x ? parseInt(x) : null;
             this.setState({
                 answersQuestion
@@ -129,10 +130,11 @@ class GameModal extends Component{
     };
 
     // EDITING QUESTIONS
-
     setEditQ = (question, e) => {
         e.stopPropagation();
             this.setState({
+                deleteA: null,
+                editA: null,
                 deleteQ: null,
                 editQ: question,
                 answersQuestion: null
@@ -332,12 +334,11 @@ class GameModal extends Component{
         })
     }
 
-
     render(){
 
         var questions = this.state.questions.map((question, i)=>{
             var correct = question.answer;
-            return <Panel header={<div style={{display: 'inline-block'}}>
+            return <Panel header={<div style={{display: 'inline-block'}} key={i}>
                 {this.state.editQ && this.state.editQ.id === question.id
                     ? <Input
                     autoFocus
@@ -371,10 +372,10 @@ class GameModal extends Component{
                             >
                                 <Icon type="delete" onClick={(e)=>{this.setDeleteQ(question, e)}}/>
                             </Popover>
-
                         </div>
 
-                    }><Question key={question.id}
+                    }
+                    ><Question key={question.id}
                              currentA={this.state.currentA}
                              currentQ={this.state.currentQ}
                              correct={correct}
@@ -439,8 +440,9 @@ class GameModal extends Component{
                         <h4 style={{textAlign: 'center', marginTop: 10}}> Questions</h4>
                         {this.state.questions.length > 0
                             ? <Collapse onChange={this.updateAnswersQuestion}
+                            // defaultActiveKey={1}
                                         accordion={true}
-                                        activeKey={!this.state.editQ  || !this.state.deleteQ ? this.state.answersQuestion : null}>
+                                        activeKey={!this.state.editQ  || !this.state.deleteQ ? [this.state.answersQuestion] : null}>
                                 {questions}
                             </Collapse>
                             : null

@@ -11,6 +11,9 @@ const mapStateToProps = ( state ) => {
 const mapDispatchToProps = ( dispatch ) => {
     return {
         newGame(game) {
+
+
+            
             const actionCreator = createAction(
                 "games/newGame"
             );

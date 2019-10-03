@@ -6,7 +6,7 @@ const Question = (props) =>{
     const {question, index, currentQ, currentA, editQ, editA, correct, updateExclude} = props;
 
     return (
-          <div>
+          <div key={question.id}>
           <h4 style={{textAlign: 'center'}}>Answers</h4>
           <Radio.Group onChange={(e)=>{props.addFinalAnswer(question.id, e)}}>
               {question.qAnswers.map((answer, i)=>{
