@@ -354,8 +354,8 @@ class GameModal extends Component{
                 </div>} key={question.id} extra={
                         <div onMouseEnter={()=>{this.updateExclude(true)}} onMouseLeave={()=>{this.updateExclude(false)}}>
                             {this.state.editQ && this.state.editQ.id === question.id
-                                ? <Icon type="save" onClick={(e)=>{this.submitEditQuestion(e)}} style={{marginRight: 10}}/>
-                                : <Icon type="edit" onClick={(e)=>{this.setEditQ(question, e)}} style={{marginRight: 10}}/>
+                                ? <Tooltip title='Save'><Icon type="save" onClick={(e)=>{this.submitEditQuestion(e)}} style={{marginRight: 10}}/></Tooltip>
+                                : <Tooltip title='Edit Question'><Icon type="edit" onClick={(e)=>{this.setEditQ(question, e)}} style={{marginRight: 10}}/></Tooltip>
                             }
                             <Popover
                                 title="Delete Question"
@@ -370,7 +370,7 @@ class GameModal extends Component{
                                 onClick={(e)=>{e.stopPropagation()}}
                                 onVisibleChange={(e)=>{this.resetQ(e)}}
                             >
-                                <Icon type="delete" onClick={(e)=>{this.setDeleteQ(question, e)}}/>
+                                <Tooltip title='Delete Question'><Icon type="delete" onClick={(e)=>{this.setDeleteQ(question, e)}}/></Tooltip>
                             </Popover>
                         </div>
 
@@ -440,7 +440,6 @@ class GameModal extends Component{
                         <h4 style={{textAlign: 'center', marginTop: 10}}> Questions</h4>
                         {this.state.questions.length > 0
                             ? <Collapse onChange={this.updateAnswersQuestion}
-                            // defaultActiveKey={1}
                                         accordion={true}
                                         activeKey={!this.state.editQ  || !this.state.deleteQ ? [this.state.answersQuestion] : null}>
                                 {questions}

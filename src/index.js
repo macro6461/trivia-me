@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import games from './reducers/games.js';
-import { createStore, applyMiddleware  } from 'redux';
+import auth from './reducers/auth.js';
+import { createStore, applyMiddleware, combineReducers  } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import './index.css';
 import App from './App';
@@ -13,7 +14,12 @@ import { sagaInitiator } from '../src/config/sagas';
 
 const sagaMiddleware = createSagaMiddleware();
 
-const store = createStore(games, applyMiddleware(sagaMiddleware));
+const rootReducer = combineReducers({
+    games,
+    auth,
+  })
+
+const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
 
 sagaInitiator(sagaMiddleware);
 

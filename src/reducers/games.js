@@ -3,7 +3,7 @@ import { notification} from "antd";
 
 const games = handleActions({
     ['games/fetchGames'](state, action) {
-
+        
     },
     ['games/getGame'](state, action) {
         return {...state, loading: true}
@@ -162,7 +162,9 @@ const games = handleActions({
     game: null,
     user: {
         id: 4,
-        username: 'mattcee'
+        username: 'mattcee',
+        games: [1, 2], //TWO GAME IDS
+        creditCards: []
     }
 });
 

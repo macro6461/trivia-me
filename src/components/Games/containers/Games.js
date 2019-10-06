@@ -2,9 +2,9 @@ import { connect } from "react-redux";
 import { createAction } from "redux-actions";
 import Games from "./../components/Games/Games.js";
 
-const mapStateToProps = ( state ) => {
+const mapStateToProps = ( {games, auth} ) => {
     return{
-        games: state.games
+        games: games.games
     }
 };
 
@@ -41,4 +41,3 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(Games);
-

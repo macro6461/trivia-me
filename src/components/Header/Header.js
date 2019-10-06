@@ -1,60 +1,29 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
-import './Header.css';
-import {Icon} from 'antd';
+import { connect } from "react-redux";
+import { createAction } from "redux-actions";
+import Header from "./components/Header.js";
 
-
-
-class Header extends Component{
-
-    state = {
-        showMenu: false
-    };
-
-    onShowMenu = () =>{
-        this.setState({
-            showMenu: !this.state.showMenu
-        })
-    };
-
-    onMouseLeave = () =>{
-        this.setState({
-            showMenu: false
-        })
-    };
-
-    onLogOut = () =>{
-
-    };
-
-    render(){
-        return (
-            <div className="header">
-                <h1><Link to="/" className="link">triviaME</Link></h1>
-                {this.props.loggedIn
-                    ? <div onMouseLeave={this.onMouseLeave}
-                           onClick={this.onShowMenu}
-                           // style={{height: this.showMenu ? 150 : 'auto'}}
-                    >
-                        <div className="user-details">
-                            <Icon type="user" className="user-icon"/>
-                            {this.state.showMenu
-                                ? <div className="user-menu">
-                                    <ul>
-                                        <Link to="/games" className="link"><li>My Games</li></Link>
-                                        <Link to="/account" className="link"><li>Account Details</li></Link>
-                                        <li>Sign Out</li>
-                                    </ul>
-                                </div>
-                                : null
-                            }
-                        </div>
-                    </div>
-                    : null
-                }
-            </div>
-        )
+const mapStateToProps = ({auth, games}) => {
+    return{
+        games: games.games,
+        game: games.game,
+        user: auth.user
     }
 };
+const mapDispatchToProps = dispatch => {
 
-export default Header;
+    return {
+        getGame(userId) {
+            const actionCreator = createAction(
+                "auth/logout"
+            );
+            const action = actionCreator(userId);
+            dispatch(action);
+        }
+    }
+};
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Header);
+
+
