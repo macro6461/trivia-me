@@ -42,7 +42,7 @@ class App extends React.Component {
         return (
             <div className="App">
                 <Header loggedIn={this.state.loggedIn} user={this.props.user}/>
-                <Switch>
+                {/* <Switch>
                     <Route exact path="/" component={Home}/>
                     <Route exact path="/games" component={Games}/>
                     <Route path="/account" component={Account}/>
@@ -52,7 +52,8 @@ class App extends React.Component {
                     }}/>
                     <Route exact path='/login' component={LoginSignUp}/>
                     <Route component={NotFound} />
-                </Switch>
+
+                </Switch> */}
             </div>
             // <div className="App">
             //     <Header/>

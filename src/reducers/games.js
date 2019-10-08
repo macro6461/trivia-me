@@ -159,13 +159,7 @@ const games = handleActions({
                 }
             ]},
     ],
-    game: null,
-    user: {
-        id: 4,
-        username: 'mattcee',
-        games: [1, 2], //TWO GAME IDS
-        creditCards: []
-    }
+    game: null
 });
 
 export default games;

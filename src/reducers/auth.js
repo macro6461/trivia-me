@@ -25,7 +25,12 @@ const auth = handleActions({
     }
 }, {
     loading: false,
-    user: null
+    user: {
+        id: 4,
+        username: 'mattcee',
+        games: [1, 2], //TWO GAME IDS
+        creditCards: []
+    }
 });
 
 
