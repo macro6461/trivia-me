@@ -17,3 +17,7 @@ code {
   display: block;
   margin: auto;
 }
+
+.app-wrapper{
+  text-align: center;
+}

@@ -38,6 +38,7 @@ export default class Header extends Component{
                     >
                         <div className="user-details">
                             <Icon type="user" className="user-icon"/>
+                            <p style={{marginBottom: 0}}>{this.props.user.username}</p>
                             {this.state.showMenu
                                 ? <div className="user-menu">
                                     <ul>

@@ -1,14 +1,31 @@
-import React, {Component} from 'react';
+import { connect } from "react-redux";
+import { createAction } from "redux-actions";
+import Account from "./components/Account/Account.js";
 
-class Account extends Component{
+const mapStateToProps = ({auth, games}) => {
 
-    render(){
-        return (
-            <div className="account">
-                <h1>Account</h1>
-            </div>
-        )
+    var games = games.games.filter((game)=>{
+        return game.owner === auth.user.id
+    })
+
+    return{
+        user: auth.user,
+        games
     }
 };
 
-export default Account;
+const mapDispatchToProps = dispatch => {
+    return {
+        // getGame(req) {
+        //     const actionCreator = createAction(
+        //         "games/getGame"
+        //     );
+        //     const action = actionCreator(req);
+        //     dispatch(action);
+        // }
+    }
+};
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Account);

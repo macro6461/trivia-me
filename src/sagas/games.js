@@ -9,6 +9,8 @@ const watchers = [
 
 function* getGame(action) {
 
+    debugger
+
     const {games, id} = action.payload;
 
     var isGame = games.find((x)=>{return x.id === id});

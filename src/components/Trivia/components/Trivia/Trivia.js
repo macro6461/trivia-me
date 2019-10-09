@@ -141,7 +141,10 @@ export default class Trivia extends Component {
                 ? <div onClick={this.calcResults}>Check Results</div>
                 : null
             }
-            {questions}
+            {questions.length > 0
+             ? questions
+             : <h1>GAME NOT FOUND</h1>
+            }
         </div>
             </div>
         );

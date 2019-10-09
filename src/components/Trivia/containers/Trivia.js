@@ -2,9 +2,10 @@ import { connect } from "react-redux";
 import { createAction } from "redux-actions";
 import Trivia from "./../components/Trivia/Trivia.js";
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ({auth, games}) => {
+    debugger
     return{
-        game: state.game
+        game: games.game
     }
 };
 

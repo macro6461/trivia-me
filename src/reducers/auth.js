@@ -22,7 +22,20 @@ const auth = handleActions({
             message: 'Unable to logout.'
         })
         return {...state, loading: false}
-    }
+    },
+    ['auth/getUserDetails'](state, action) {
+        return {...state, loading: true}
+    },
+    ['auth/getUserDetails/success'](state, action) {
+        debugger
+        return {...state, loading: false, user: action.payload}
+    },
+    ['auth/getUserDetails/fail'](state, action) {
+        notification.error({
+            message: 'Unable to access user details.'
+        })
+        return {...state, loading: false}
+    },
 }, {
     loading: false,
     user: {

@@ -3,3 +3,8 @@
 .App {
   text-align: center;
 }
+
+.home a {
+  text-decoration: none;
+  color: inherit;
+}

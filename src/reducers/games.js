@@ -78,6 +78,7 @@ const games = handleActions({
         id: 1,
         name: 'My First Trivia Game',
         timed: false,
+        owner: 4,
         questions: [
             {
                 id: 0,
@@ -120,6 +121,7 @@ const games = handleActions({
             id: 2,
             name: 'My Second Trivia Game',
             timed: false,
+            owner: 4,
             questions: [
                 {
                     id: 0,
