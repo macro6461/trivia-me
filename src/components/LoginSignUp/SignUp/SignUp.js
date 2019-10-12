@@ -1,10 +1,20 @@
 import React from 'react';
+import {Card, Input, Form, Button, Icon} from 'antd'
+import '../LoginSignUp.css'
+import UserForm from '../LoginSignUpForm/LoginSignUpForm';
 
-const SignUp = () => {
+const SignUp = (props) => {
+
+    const handleSubmit = () =>{
+        console.log('signing up')
+    };
 
     return (
-        <div>
-            <h1>Login</h1>
+        <div >
+            <UserForm
+                submitText='Create Account'
+                handleSubmit={handleSubmit}
+            />
         </div>
     )
 };

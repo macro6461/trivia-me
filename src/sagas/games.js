@@ -5,11 +5,10 @@ const watchers = [
     takeLatest("games/newGame", newGame),
     takeLatest("games/editGame", editGame),
     takeLatest("games/deleteGame", deleteGame),
+    takeLatest("auth/updateUserGames", updateUserGames),
 ];
 
 function* getGame(action) {
-
-    debugger
 
     const {games, id} = action.payload;
 
@@ -35,6 +34,11 @@ function* newGame(action) {
         payload: action.payload
     });
 
+    yield put({
+        type: 'auth/updateUserGames',
+        payload: action.payload.id
+    });
+
     // yield put({
     //     type: 'games/newGame/fail',
     //     payload: action.payload
@@ -58,6 +62,19 @@ function* deleteGame(action) {
 
     yield put({
         type: 'games/deleteGame/success',
+        payload: action.payload
+    });
+
+    // yield put({
+    //     type: 'games/deleteGame/fail',
+    //     payload: action.payload
+    // })
+}
+
+function* updateUserGames(action) {
+
+    yield put({
+        type: 'auth/updateUserGames/success',
         payload: action.payload
     });
 

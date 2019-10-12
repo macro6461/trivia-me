@@ -6,7 +6,8 @@ const mapStateToProps = ({auth, games}) => {
     return{
         games: games.games,
         game: games.game,
-        user: auth.user
+        user: auth.user,
+        loggedIn: auth.loggedIn
     }
 };
 const mapDispatchToProps = dispatch => {

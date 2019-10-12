@@ -122,11 +122,11 @@ export default class Trivia extends Component {
 
         return (
             <div style={{width: 85 + '%', display: 'block', margin: 'auto'}}>
-                <div style={{float: 'left'}}>
+                <div className='backContainer'>
                     <Link to='/games' className="link"><Button type="primary" style={{fontSize: 15, color: 'white', backgroundColor: '#B19CD9', border: 'solid 1px white'}}><Icon type="logout" style={{transform: 'rotateY(180deg)'}}/> Back</Button></Link>
                 </div>
             <div className="triviaContainer" >
-                <h2>{this.state.game ? this.state.game.name : null}</h2>
+                <h1>{this.state.game ? this.state.game.name : null}</h1>
             {this.state.showFinal
                 ? <h3>You got {this.state.questions.filter(x=>x.correct).length} out of {this.state.questions.length} correct! </h3>
                 : null
@@ -141,11 +141,12 @@ export default class Trivia extends Component {
                 ? <div onClick={this.calcResults}>Check Results</div>
                 : null
             }
+
             {questions.length > 0
              ? questions
              : <h1>GAME NOT FOUND</h1>
             }
-        </div>
+                </div>
             </div>
         );
     }

@@ -1,8 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Router, Route, Redirect, Switch  } from "react-router";
-
-import App from "../App.js";
+import { Route, Redirect, Switch  } from "react-router-dom";
 import Home from "../components/Home/Home";
 import Games from "../components/Games/containers/Games";
 import LoginSignUp from "../components/LoginSignUp/LoginSignUp";
@@ -38,21 +36,19 @@ const accountDetails = () =>{
 const Routes = ({ history, store }) => {
 
     return (
-        <Router history={history} store={store}>
-                <Route path="/" component={App}/>
-                <Route exact path="/" component={Home} />
-                <Route exact path="/401" component={NotFound} />
-                <Route exact path="/403" component={NotFound} />
-                <Route exact path="/404" component={NotFound} />
-                <Route exact path="/440" component={NotFound} />
-                <Route exact path="/500" component={NotFound} />
-                <Route exact path="/404" component={NotFound} />
-                <Route exact path="/games" component={Games} />
-                <Route exact path="/account" render={accountDetails}/>
-                <Route path="/games/:id" render={getGame} />
-                <Route path="/login" component={LoginSignUp} />
-                {/*<Route component={NotFound} />*/}
-        </Router>
+                <Switch>
+                    <Route exact path="/" component={Home} />
+                    <Route exact path="/401" component={NotFound} />
+                    <Route exact path="/403" component={NotFound} />
+                    <Route exact path="/404" component={NotFound} />
+                    <Route exact path="/440" component={NotFound} />
+                    <Route exact path="/500" component={NotFound} />
+                    <Route exact path="/games" component={Games} />
+                    <Route exact path="/account" render={accountDetails}/>
+                    <Route path="/games/:id" render={getGame} />
+                    <Route path="/login" component={LoginSignUp} />
+                    <Redirect to='404' />
+                </Switch>
     );
 };
 

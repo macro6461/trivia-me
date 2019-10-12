@@ -29,6 +29,7 @@ export default class Header extends Component{
 
     render(){
         return (
+            <div className='head-container'>
             <div className="header">
                 <h1><Link to="/" className="link">triviaME</Link></h1>
                 {this.props.loggedIn
@@ -53,6 +54,7 @@ export default class Header extends Component{
                     </div>
                     : null
                 }
+            </div>
             </div>
         )
     }

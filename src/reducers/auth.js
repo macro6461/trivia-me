@@ -27,17 +27,32 @@ const auth = handleActions({
         return {...state, loading: true}
     },
     ['auth/getUserDetails/success'](state, action) {
-        debugger
         return {...state, loading: false, user: action.payload}
     },
     ['auth/getUserDetails/fail'](state, action) {
         notification.error({
             message: 'Unable to access user details.'
-        })
+        });
         return {...state, loading: false}
     },
+    ['auth/updateUserGames'](state, action) {
+        return {...state, loading: true}
+    },
+    ['auth/updateUserGames/success'](state, action) {
+
+        var user = state.user;
+        var games = user.games;
+        games.push(action.payload);
+
+        user.games = games;
+
+
+        return {...state, user, loading: false}
+    },
+
 }, {
     loading: false,
+    loggedIn: true,
     user: {
         id: 4,
         username: 'mattcee',

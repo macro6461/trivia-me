@@ -17,16 +17,23 @@ class LoginSignUp extends Component{
 
     render(){
 
-        var text = this.state.view ? "Create Account" : "Sign In";
+        var text = this.state.view
+            ? <p onClick={this.changeState} style={{cursor: 'pointer'}}>New to triviaME? <strong style={{textDecoration: 'underline'}}>Create an account.</strong></p>
+            : <p onClick={this.changeState} style={{cursor: 'pointer'}}>Have an account? <strong style={{textDecoration: 'underline'}}>Sign In.</strong></p>;
+
+        var title = this.state.view
+            ? 'Login to triviaME'
+            : 'Join triviaME';
 
         return (
-            <div>
-                <h1>Login Or Sign Up</h1>
-                <p onClick={this.changeState}>{text}</p>
-                    {this.state.view
-                        ? <Login/>
-                        : <SignUp/>
-                    }
+            <div className='login-container'>
+                <h1>{title}</h1>
+                {this.state.view
+                    ? <Login/>
+                    : <SignUp/>
+                }
+                <br/>
+                {text}
             </div>
         )
     }

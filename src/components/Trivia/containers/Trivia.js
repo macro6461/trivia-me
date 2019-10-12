@@ -3,7 +3,6 @@ import { createAction } from "redux-actions";
 import Trivia from "./../components/Trivia/Trivia.js";
 
 const mapStateToProps = ({auth, games}) => {
-    debugger
     return{
         game: games.game
     }

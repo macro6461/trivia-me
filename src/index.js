@@ -4,12 +4,9 @@ import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-rou
 // import { browserHistory } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import { Provider } from 'react-redux';
-import games from './reducers/games.js';
+import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import App from './App.js'
 
-import auth from './reducers/auth.js';
-import Routes from './routes/index.js';
-import { createStore, applyMiddleware, combineReducers  } from 'redux';
-import createSagaMiddleware from 'redux-saga';
 import './index.css';
 import store from '../src/config/store';
 import * as serviceWorker from './serviceWorker';
@@ -21,12 +18,11 @@ const browserHistory = syncHistoryWithStore(history, store);
 ReactDOM.render(
     <div className="app-wrapper">
         <Provider store={store}>
-            <Routes history={browserHistory} store={store}/>
+            <Router history={browserHistory} store={store}>
+                <App/>
+            </Router>
         </Provider>
     </div>,
     document.getElementById('root'));
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();

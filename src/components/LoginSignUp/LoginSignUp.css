@@ -1,0 +1,12 @@
+.login-container{
+    width: 300px;
+    display: block;
+    margin: auto;
+}
+.login{
+    width: 300px;
+    display: block;
+    margin: auto;
+    border: solid 2px #B19CD9;
+    border-radius: 5px;
+}

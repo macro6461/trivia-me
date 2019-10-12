@@ -54,7 +54,7 @@ const TriviaQuestion = function TriviaQuestion(props) {
 
     var display = "none";
 
-    var icon = null
+    var icon = null;
 
     var userJourneyObj = props.userJourney.find((x)=>{return x.qId === props.qId});
 
@@ -102,21 +102,25 @@ const TriviaQuestion = function TriviaQuestion(props) {
     });
 
     if (props.currentQuestion === props.qId){
-        display = 'block'
+        display = ''
     }
 
     if (props.showFinal && props.question.correct){
         icon = <FaCheckSquare style={{color: '#00A86B'}}/>;
-        display = 'block'
+        display = ''
     } else if (props.showFinal && !props.question.correct){
         icon = <FaRegWindowClose style={{color: '#cc3333'}}/>;
-        display = 'block'
+        display = ''
     }
 
     return (
         <div className="questionContainer" style={{display}}>
-            <h3>{props.index + 1 + '. ' + props.question.qTitle} {icon}</h3>
+            <div className='qColumn'>
+                <h2>{props.index + 1 + '. ' + props.question.qTitle} {icon}</h2>
+            </div>
+            <div className='aColumn'>
             {answers}
+            </div>
         </div>
     )
 

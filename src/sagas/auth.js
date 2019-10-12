@@ -6,7 +6,6 @@ const watchers = [
 ];
 
 function* getUserDetails(action) {
-    debugger
     yield put({
         type: 'auth/getUserDetails/success',
         payload: action.payload
