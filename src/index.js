@@ -19,7 +19,7 @@ ReactDOM.render(
     <div className="app-wrapper">
         <Provider store={store}>
             <Router history={browserHistory} store={store}>
-                <App/>
+                <App history={browserHistory}/>
             </Router>
         </Provider>
     </div>,

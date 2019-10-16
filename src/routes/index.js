@@ -3,50 +3,45 @@ import PropTypes from "prop-types";
 import { Route, Redirect, Switch  } from "react-router-dom";
 import Home from "../components/Home/Home";
 import Games from "../components/Games/containers/Games";
-import LoginSignUp from "../components/LoginSignUp/LoginSignUp";
+import LoginSignUp from "../components/LoginSignUp/containers/LoginSignUp";
 import NotFound from "../components/NotFound/NotFound";
-import Account from "../components/Account/Account";
-import Trivia from "../components/Trivia/containers/Trivia.js";
+
+import {initUser} from "./auth";
+import {getGame} from "./games";
 import store from '../config/store';
 
-const getGame = (nextState, replace, callback) => {
-    var userGames = store.getState().auth.user.games;
-    if (userGames.includes(parseInt(nextState.match.params.id))){
-        var games = store.getState().games.games;
-        var id = parseInt(nextState.match.params.id);
-        store.dispatch({
-            type: 'games/getGame',
-            payload: {games, id}
-        });
-        return <Trivia/>
-    } else {
-        return <Redirect to="/403"/>
-    }
-};
-
-const accountDetails = () =>{
-    var user = store.getState().auth.user;
-    store.dispatch({
-        type: 'auth/getUserDetails',
-        payload: user
-    });
-    return <Account/>
+const PrivateRoute = ({ component: Component, ...rest }) => {
+    //check if user is logged in. If not, redirect to login/signup.
+    var isLoggedIn = store.getState().auth.loggedIn;
+    return <Route {...rest} render={
+        (props) => {
+            if (isLoggedIn) {
+                if (!rest.component && rest.render) {
+                    return rest.render(rest.computedMatch)
+                } else {
+                    return <Component {...props}/>
+                }
+            } else {
+                return <Redirect to='/login'/>
+            }
+        }
+    } />
 };
 
 const Routes = ({ history, store }) => {
 
     return (
                 <Switch>
-                    <Route exact path="/" component={Home} />
-                    <Route exact path="/401" component={NotFound} />
-                    <Route exact path="/403" component={NotFound} />
-                    <Route exact path="/404" component={NotFound} />
-                    <Route exact path="/440" component={NotFound} />
-                    <Route exact path="/500" component={NotFound} />
-                    <Route exact path="/games" component={Games} />
-                    <Route exact path="/account" render={accountDetails}/>
-                    <Route path="/games/:id" render={getGame} />
-                    <Route path="/login" component={LoginSignUp} />
+                    <PrivateRoute exact path="/" component={Home} history={history}/>
+                    <PrivateRoute exact path="/games" history={history} component={Games} />
+                    <PrivateRoute exact path="/account" history={history} render={initUser}/>
+                    <PrivateRoute path="/games/:id" history={history} render={getGame} />
+                    <Route path="/login" history={history} component={LoginSignUp} />
+                    <Route exact path="/401" history={history} component={NotFound} />
+                    <Route exact path="/403" history={history} component={NotFound} />
+                    <Route exact path="/404" history={history} component={NotFound} />
+                    <Route exact path="/440" history={history} component={NotFound} />
+                    <Route exact path="/500" history={history} component={NotFound} />
                     <Redirect to='404' />
                 </Switch>
     );

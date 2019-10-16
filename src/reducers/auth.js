@@ -2,20 +2,22 @@ import {handleActions} from 'redux-actions';
 import { notification} from "antd";
 
 const auth = handleActions({
-    ['auth/login'](state, action) {
+    ['auth/signIn'](state, action) {
         return {...state, loading: true}
     },
-    ['auth/login/success'](state, action) {
-        
+    ['auth/signIn/success'](state, action) {
+        // var user = action.payload;
+        var user = state.user;
+        return {...state, loggedIn: !state.loggedIn, loading: false, user}
     },
-    ['auth/login/fail'](state, action) {
-
+    ['auth/signIn/fail'](state, action) {
+        return {...state, loggedIn: false, loading: false}
     },
     ['auth/logout'](state, action) {
         return {...state, loading: true}
     },
     ['auth/logout/success'](state, action) {
-        return {...state, loading: false, user: null}
+        return {...state, loading: false, user: null, loggedIn: false}
     },
     ['auth/logout/fail'](state, action) {
         notification.error({
@@ -52,7 +54,7 @@ const auth = handleActions({
 
 }, {
     loading: false,
-    loggedIn: true,
+    loggedIn: false,
     user: {
         id: 4,
         username: 'mattcee',

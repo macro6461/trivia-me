@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import Login from './Login/Login.js';
-import SignUp from './SignUp/SignUp.js';
+import Login from './components/Login/Login.js';
+import SignUp from './components/SignUp/SignUp.js';
 
 
 class LoginSignUp extends Component{
 
     state = {
-        view: false,
+        view: true,
     };
 
     changeState = () =>{
@@ -29,8 +29,8 @@ class LoginSignUp extends Component{
             <div className='login-container'>
                 <h1>{title}</h1>
                 {this.state.view
-                    ? <Login/>
-                    : <SignUp/>
+                    ? <Login fields={['username', 'password']} onSubmit={this.props.signIn} history={this.props.history}/>
+                    : <SignUp fields={['username', 'password', 'email']} onSubmit={this.props.signUp} history={this.props.history}/>
                 }
                 <br/>
                 {text}

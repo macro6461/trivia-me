@@ -1,24 +1,49 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import Header from './components/Header/Header.js';
 import './App.css';
 import Routes from './routes/index.js';
+import {connect} from "react-redux";
+import { createAction } from "redux-actions";
 
 class App extends React.Component {
 
-    state = {
-        loggedIn: true
-    };
-
     render(){
+
         return (
             <div className="App">
-                <Header/>
+                <Header history={this.props.history}
+                        onLogout={this.props.onLogout}
+                        user={this.props.user}
+                        loggedIn={this.props.loggedIn}
+                />
                 <Routes/>
             </div>
       );
     }
 }
 
-export default App;
+const mapStateToProps = ({auth, games}) => {
+    return{
+        user: auth.user,
+        loggedIn: auth.loggedIn
+    }
+};
+const mapDispatchToProps = dispatch => {
+
+    return {
+        onLogout(req) {
+            const actionCreator = createAction(
+                "auth/logout"
+            );
+            const action = actionCreator(req);
+            dispatch(action);
+        }
+    }
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(App);
 
