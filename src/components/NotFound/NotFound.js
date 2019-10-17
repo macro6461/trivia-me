@@ -1,11 +1,10 @@
-import React, {Component} from 'react';
+import React from 'react';
 import './style.css';
 import {Icon} from 'antd';
 
-class NotFound extends Component{
+const NotFound = (props) => {
 
-    render(){
-        var errorNum = this.props.match.path ? this.props.match.path.split('/')[1] : null
+        var errorNum = props.match.path ? props.match.path.split('/')[1] : null;
         var errorMessage
         if (errorNum === '403'){
             errorMessage = 'Not Authorized'
@@ -24,7 +23,6 @@ class NotFound extends Component{
                 </div>
             </div>
         )
-    }
 };
 
 

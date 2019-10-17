@@ -12,8 +12,7 @@ class App extends React.Component {
 
         return (
             <div className="App">
-                <Header history={this.props.history}
-                        onLogout={this.props.onLogout}
+                <Header onLogout={this.props.onLogout}
                         user={this.props.user}
                         loggedIn={this.props.loggedIn}
                 />

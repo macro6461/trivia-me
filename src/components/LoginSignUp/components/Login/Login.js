@@ -5,8 +5,7 @@ import '../../LoginSignUp.css'
 const Login = (props) =>{
 
     const handleSubmit = (values) =>{
-        debugger
-        props.onSubmit({creds: values, history: props.history})
+        props.onSubmit({creds: values})
     };
 
     return (

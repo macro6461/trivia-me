@@ -5,8 +5,8 @@ import UserForm from '../LoginSignUpForm/LoginSignUpForm';
 
 const SignUp = (props) => {
 
-    const handleSubmit = () =>{
-        console.log('signing up')
+    const handleSubmit = (values) =>{
+        props.onSubmit({creds: values})
     };
 
     return (

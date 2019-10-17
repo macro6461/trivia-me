@@ -1,6 +1,6 @@
 import React from "react";
 import store from '../../config/store';
-import Account from "../../components/Account/Account";
+import Account from "../../components/Account/containers/Account/Account.js";
 
 
 const initUser = (nextState, replace, callback) => {

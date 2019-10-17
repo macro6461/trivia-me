@@ -4,7 +4,10 @@ const watchers = [
     takeLatest("auth/signIn", signIn),
     takeLatest("auth/signUp", signUp),
     takeLatest("auth/logout", logout),
-    takeLatest("auth/getUserDetails", getUserDetails)
+    takeLatest("auth/getUserDetails", getUserDetails),
+    takeLatest("auth/editUserProfile", editUserProfile ),
+    takeLatest("auth/deleteUserProfile", deleteUserProfile ),
+    takeLatest("auth/toDelete", toDelete ),
 ];
 
 function* signIn(action) {
@@ -14,9 +17,7 @@ function* signIn(action) {
         payload: action.payload.creds
     });
 
-    //pass history along with action.payload
-
-    action.payload.history.push('/')
+    window.location.href = '/';
 }
 
 function* signUp(action) {
@@ -25,8 +26,7 @@ function* signUp(action) {
         payload: action.payload.creds
     });
 
-    //passed history along with action.payload
-    action.payload.history.push('/')
+    window.location.href = '/';
 }
 
 
@@ -43,9 +43,33 @@ function* logout(action) {
         payload: action.payload
     });
 
-    action.payload.history.push('/login')
-
+    window.location.href = '/login';
 }
+
+function* editUserProfile(action) {
+    yield put({
+        type: 'auth/editUserProfile/success',
+        payload: action.payload
+    });
+}
+
+function* deleteUserProfile(action) {
+    yield put({
+        type: 'auth/deleteUserProfile/success',
+        payload: null
+    });
+
+    // window.location.href = '/login';
+}
+
+
+function* toDelete(action) {
+    yield put({
+        type: 'auth/toDelete/success',
+        payload: null
+    });
+}
+
 
 export default function*() {
     yield all(watchers);

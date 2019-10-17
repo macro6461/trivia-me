@@ -24,7 +24,7 @@ export default class Header extends Component{
     };
 
     onLogOut = () =>{
-        this.props.onLogout({userId: this.props.user.id, history: this.props.history})
+        this.props.onLogout({id: this.props.user.id})
     };
 
     render(){

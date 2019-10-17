@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import GameModal from '../GameModal/GameModal.js';
 import './Games.scss';
-import {Modal, Icon, Tooltip, Button} from 'antd';
+import {Modal, Icon, Tooltip, Button, Card} from 'antd';
 
 class Games extends Component{
 
@@ -71,6 +71,7 @@ class Games extends Component{
 
         return (
             <div className="account">
+                <Card style={{maxWidth: 1000, display: 'block', margin: 'auto'}}>
                 {this.state.showDelete ?
                     <Modal
                         title={this.state.selectedGame ? 'Delete ' + this.state.selectedGame.name : 'Delete'}
@@ -110,6 +111,7 @@ class Games extends Component{
                     : <p>You don't have any games.</p>
                 }
                 </div>
+                </Card>
             </div>
         )
     }

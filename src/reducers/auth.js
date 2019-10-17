@@ -51,16 +51,53 @@ const auth = handleActions({
 
         return {...state, user, loading: false}
     },
+    ["auth/editUserProfile"](state, action){
+        return {...state, loading: true}
+    },
+    ["auth/editUserProfile/success"](state, action){
+        var user = state.user;
+        user = {...user, ...action.payload};
+
+        notification.success({
+            message: 'Profile Updated!'
+        });
+
+        return {...state, loading: false, user}
+    },
+    ["auth/editUserProfile/fail"](state, action){
+        notification.error({
+            message: 'Unable to update profile.'
+        });
+        return {...state, loading: false}
+    },
+    ["auth/deleteUserProfile"](state, action){
+        return {...state, loading: true}
+    },
+    ["auth/deleteUserProfile/success"](state, action){
+        return {...state, loading: false, user: action.payload, loggedIn: false, toDelete: true}
+    },
+    ["auth/deleteUserProfile/fail"](state, action){
+        notification.error({
+            message: 'Unable to delete profile.'
+        });
+        return {...state, loading: false}
+    },
+    ["auth/toDelete"](state, action){
+        return {...state, loading: false, user: action.payload, loggedIn: false, toDelete: false}
+    }
 
 }, {
     loading: false,
-    loggedIn: false,
+    loggedIn: true,
     user: {
         id: 4,
         username: 'mattcee',
-        games: [1, 2], //TWO GAME IDS
+        email: 'mattcroak718@gmail.com',
+        games: [1, 2], //TWO GAME IDS,
+        invitedGames: [], //GAMES USER DID NOT CREATE BUT HAD ACCESS TO
         creditCards: []
-    }
+    },
+    toDelete: false
 });
 
 
