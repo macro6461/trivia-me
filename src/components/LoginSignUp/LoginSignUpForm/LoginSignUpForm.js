@@ -7,7 +7,6 @@ const LoginSignUpForm = (props) =>{
    const handleSubmit = () =>{
 
         var values = props.form.getFieldsValue();
-        debugger
 
         // props.handleSubmit
 

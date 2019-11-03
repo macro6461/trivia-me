@@ -11,9 +11,6 @@ const mapStateToProps = ( {games, auth} ) => {
 const mapDispatchToProps = ( dispatch ) => {
     return {
         newGame(game) {
-
-
-            
             const actionCreator = createAction(
                 "games/newGame"
             );
@@ -32,6 +29,13 @@ const mapDispatchToProps = ( dispatch ) => {
                 "games/deleteGame"
             );
             const action = actionCreator(id);
+            dispatch(action);
+        },
+        getGames(){
+            const actionCreator = createAction(
+                "games/getGames"
+            );
+            const action = actionCreator();
             dispatch(action);
         }
     }

@@ -27,6 +27,10 @@ class Games extends Component{
         }
     };
 
+    componentDidMount = () =>{
+        this.props.getGames();
+    }
+
     newGame = (game) =>{
         this.props.newGame(game);
         this.closeModal('showNew')
